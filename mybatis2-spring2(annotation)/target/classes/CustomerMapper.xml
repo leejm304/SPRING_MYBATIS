@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.vo.Customer">
+	<resultMap id="customerResultMap" type="Customer"
+			   autoMapping="true">
+		<id property="id" column="id" /> <!-- 주키(pk)에 해당하는 mapping --> <!-- property는 java에서의 이름, column은  DB에서의 컬럼명 -->
+		<result property="name" column="name" /> <!-- 일반키에 해당하는 mapping -->
+		<association property="post" javaType="com.my.vo.Post" autoMapping="true"> <!-- many -> 1 : association 사용 -->
+			<id property="buildingno" column="buildingno" />
+			<result property="zipcode" column="zipcode" />
+		</association>
+	</resultMap>
+	<!-- <select id="selectBlog" resultType="Blog"> select * from Blog where 
+		id = #{id} </select> -->
+	<!-- <update id="updateName"> UPDATE customer SET name='바티스' where id=#{aaa}; 
+		</update> -->
+	<update id="updateName" parameterType="java.lang.String">
+		UPDATE customer SET name=#{name} where id=#{id}
+	</update>
+	<insert id="insert" parameterType="Customer">
+		INSERT INTO customer(id, pwd, name, addr)
+		VALUES (#{id}, #{pwd}, #{name}, #{addr})
+	</insert>
+	<delete id="delete" parameterType="string">
+		DELETE customer WHERE id=#{id}
+	</delete>
+	<select id="selectById" parameterType="string"
+		resultType="com.my.vo.Customer">
+		SELECT * FROM customer where id=#{id}
+	</select>
+	<select id="selectCount" resultType="int"> <!-- int : java.lang.Integer의 약자 -->
+		SELECT COUNT(*) FROM customer
+	</select>
+	<select id="selectGroup" resultType="map">  <!-- map : java.util.HashMap의 약자 -->
+		SELECT COUNT(*) C1, COUNT(*)/2 C2 <!-- 별칭 대문자 -->
+		FROM customer
+	</select>
+	<select id="selectAll" resultType="com.my.vo.Customer">
+		SELECT * FROM customer
+	</select>
+	<select id="selectZipcodeById" parameterType="string"
+		resultMap="customerResultMap">
+		SELECT c.id, p.buildingno, c.name, p.zipcode
+		FROM customer c join post p
+		ON c.buildingno = p.buildingno
+		WHERE id=#{id}
+	</select>
+</mapper>

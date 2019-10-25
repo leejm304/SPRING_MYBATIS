@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.vo.Customer">
+
+	<!-- has-a 관계설정 -->
+	<resultMap id="CustomerResultMap" type="Customer" autoMapping="true">
+		<id property="id" column="id" />
+		<association property="post" javaType="com.my.vo.Post" autoMapping="true">
+			<id property="buildingno" column="buildingno" /> <!-- column은 DB에서의 컬럼명, property는 Post class에서의 변수이름 -->
+		</association>
+	</resultMap>
+
+	<update id="updateName" parameterType="string">
+		UPDATE customer SET name =
+		#{name} WHERE id=#{id}
+	</update>
+
+	<insert id="insert" parameterType="Customer">
+		INSERT INTO customer(id, pwd,
+		name, addr)
+		VALUES(#{id}, #{pwd}, #{name}, #{addr})
+	</insert>
+
+	<delete id="delete" parameterType="string">
+		DELETE customer where id=#{id}
+	</delete>
+
+	<select id="selectById" parameterType="string"
+		resultType="Customer"> <!-- string = java.lang.String의 약어 -->
+		SELECT * FROM customer WHERE id=#{id}
+	</select>
+
+	<select id="selectCount" resultType="int"><!-- java.lang.Integer의 약어 -->
+		SELECT COUNT(*) FROM customer
+	</select>
+
+	<select id="selectGroup" resultType="map"><!-- map = java.util.HashMap의 
+			약어 -->
+		SELECT COUNT(*) c1, COUNT(*)/2 c2
+		FROM customer
+	</select>
+
+	<select id="selectAll" resultType="Customer">
+		SELECT * FROM customer
+	</select>
+
+	<select id="selectZipcodeById" parameterType="string"
+		resultMap="CustomerResultMap">
+		select id, c.buildingno, name, zipcode
+		from customer c join post p
+		on
+		c.buildingno
+		= p.buildingno
+		where id = #{id}
+	</select>
+
+</mapper>

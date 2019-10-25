@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.vo.Order">
+
+	<resultMap id="orderResultMap" type="OrderInfo"
+		autoMapping="true">
+		<id property="order_no" column="order_no" />
+		<collection property="orderLines" ofType="OrderLine"
+			autoMapping="true">
+			<id property="order_no" column="order_no" />
+			<id property="product.prod_no" column="order_prod_no" />
+			<!-- id는 pk 역할.
+					property 값이 다르면 OrderLine타입의 새객채를 생성 -->
+			<!-- 	property값이 같으면 OrderLine타입의 기존객체 사용 -->
+			<!-- id태그가 없으면 무조건 OrderLine타입의 새객체를 생성 -->
+			<association property="product"
+				javaType="com.my.vo.Product" autoMapping="true">
+				<id property="prod_no" column="order_prod_no" />
+			</association>
+		</collection>
+	</resultMap>
+
+	<select id="selectById" parameterType="string"
+		resultMap="orderResultMap">
+		SELECT info.order_no, info.order_time,
+		line.order_prod_no,
+		line.order_quantity,
+		p.prod_name, p.prod_price
+		FROM order_info info JOIN
+		order_line line ON info.order_no = line.order_no
+		JOIN product p ON
+		p.prod_no = line.order_prod_no
+		WHERE order_id = #{id}
+		order by info.order_no
+	</select>
+
+	<!-- 주문기본 -->
+	<insert id="insertOrderInfo" parameterType="string">
+		INSERT INTO
+		order_info(order_no, order_id, order_time)
+		VALUES(order_seq.NEXTVAL,
+		#{order_id}, SYSTIMESTAMP)
+	</insert>
+
+	<!-- 주문상세 -->
+	<insert id="insertOrderLine" parameterType="OrderLine">
+		INSERT INTO
+		order_line(order_no, order_prod_no, order_quantity)
+		VALUES(order_seq.CURRVAL, #{product.prod_no}, #{order_quantity})
+	</insert>
+
+</mapper>
+

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+$(function(){
+	$("#bt1").click(function(){
+		$.ajax({
+			url:'../a.jsp',
+			method:'GET',
+			success:function(data){
+				$("div").empty().html(data);//method chaining
+				//$("div").html(data);
+			}
+		});
+	});	
+	$("#bt2").click(function(){
+		$.ajax({
+			url:'http://192.168.30.102:8080/web8/a.jsp',
+			method:'GET',
+			success:function(data){
+				$("div").empty().html(data);//method chaining
+				//$("div").html(data);
+			}
+		});
+	});	
+});
+</script>
+</head>
+<body>
+<button id="bt1">ajax요청</button>
+<form action = "../a.jsp"><button>일반요청</button></form>
+<button id="bt2">ajax로 다른도메인 요청</button>
+<div></div>
+<input type="text">
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jq/on.html</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	//$(document).ready(function() {
+		
+	$(function(){//DOM트리가 완성될때
+		var $btObj = $("button");
+		$btObj.click(function() {
+			var $divObj = $("div");
+			var inner = '<p>단락-클릭해보세요!</p>';
+			//$divObj.innerHTML = inner;
+			$divObj.html(inner); //html로 사용가능 (jquery)
+		});
+		
+		//DOM에서 p객체 찾기 --p가 클릭했을때 생기는 객체라 이 구문은 틀림.
+		//$("p").click(function(){
+		//	$(this).css("background-color","yellow");
+		//});
+		
+		//DOM에서 div객체를 찾고
+		//후손으로 추가될 p요소의 click이벤트 핸들러 (동적으로 추가된 요소의 이벤트핸들러 제어 시에 사용)
+		$("div").on("click","p",function(){
+			$(this).css("background-color","yellow");
+		});
+	});
+</script>
+</head>
+<body>
+	<button>클릭</button>
+	<div></div>
+</body>
+</html>

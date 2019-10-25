@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="second" class="a.Second2"></bean> <!-- Second second = new Second1(); -->
+	<!-- setter를 이용한 주입 -->
+	<bean id="first-set" class="a.First"> <!-- First first = new First(); -->
+		<property name="num" value="77"></property> <!-- first.setNum(99); -->
+		<!-- 
+		<property name="num">
+        	<value>77</value>
+      	</property> 
+      	-->
+		<property name="second" ref="second"></property> <!-- first.setSecond(second); -->
+		<!-- 
+		<property name="second">
+			<ref bean="second">
+		</property>
+		 -->
+	</bean>
+	<!-- 생성자를 통한 주입 -->
+	<bean id="first-con" class="a.First">
+		<constructor-arg name="num" value="88"/>
+		<constructor-arg name="flag" value="true"/>
+		<constructor-arg name="msg" value="hello"/>
+		<constructor-arg name="second" ref="second"/>
+	</bean>
+	<bean id="first-list" class="a.First">
+		<property name="list">
+			<list value-type="java.lang.String">
+				<value>서울시</value>
+				<value>경기도</value>
+				<value>제주도</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="first-map" class="a.First">
+		<property name="map">
+			<map key-type="java.lang.Integer"> 
+			<!-- .java에서 Map<String,String>으로 해놨기때문에 key_type을 Integer해도 자동 형변환된다. -->
+				<entry key="1" value="ONE"/>
+				<entry key="2" value="TWO"/>
+			</map>
+		</property>
+	</bean>
+
+</beans>

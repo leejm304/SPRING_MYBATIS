@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.vo.Product">
+
+	<resultMap id="ProductResultMap" type="com.my.vo.Product" autoMapping="true">
+		<id property="prod_no" column="prod_no" />
+		<association property="category" javaType="com.my.vo.Category" autoMapping="true">
+			<id property="cate_no" column="cate_no" /> <!-- column은 DB에서의 컬럼명, property는 Post class에서의 변수이름 -->
+		</association>
+	</resultMap>
+
+	
+	<select id="selectAll" resultMap="ProductResultMap">
+		select c.cate_name,
+				p.prod_no, p.prod_name, p.prod_price
+		from category c join product p
+						on c.cate_no = p.prod_cate_no
+		order by c.cate_no
+	</select>
+	
+	<select id="selectByNo" parameterType="string" resultMap="ProductResultMap">
+		select c.cate_name,
+				p.prod_no, p.prod_name, p.prod_price, p.prod_detail
+		from category c join product p
+						on c.cate_no = p.prod_cate_no
+		where p.prod_no = #{prod_no}
+	</select>
+
+</mapper>

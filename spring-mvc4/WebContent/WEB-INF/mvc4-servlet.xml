@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- springMVC용 -->
+	<!-- contol패키지에서 @Component계열 어노테이션이 설정된 클래스 타입의 객체 생성 -->
+	<context:component-scan base-package="control" />
+
+	<!-- springMVC용 -->
+	<!-- 생성된 객체중 @Control 어노테이션 객체 찾기 @RequestMapping어노테이션 메소드 찾아 실행 -->
+	<!-- <mvc:annotation-driven /> -->
+
+	<!-- <mvc:view-resolvers> <mvc:jsp prefix="/" /> </mvc:view-resolvers> -->
+
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+</beans>
